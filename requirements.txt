@@ -1,0 +1,14 @@
+pinecone-client
+openai
+google-generativeai
+python-dotenv
+PyPDF2
+python-pptx
+docx2txt
+pdfminer.six
+requests
+google-api-python-client
+tqdm
+python-docx
+numpy
+beautifulsoup4
