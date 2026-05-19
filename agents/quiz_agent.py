@@ -1039,13 +1039,13 @@ def send_assessment_email(student_email: str, assessment: Dict, quiz_result: Dic
             
             <div style='margin-top: 30px; padding: 20px; background: #FFF3E0; border-radius: 5px; border-left: 4px solid #FF9800;'>
                 <h3 style='color: #EF6C00;'>💪 Encouragement & Motivation</h3>
-                <p><strong>🌟 Positive Feedback:</strong> {positive_feedback}</p>
-                <p><strong>🚀 Motivational Message:</strong> {motivational_message}</p>
-                <p><strong>🎯 Next Goal:</strong> {improvement_goal}</p>
+                <p><strong>Positive Feedback:</strong> {positive_feedback}</p>
+                <p><strong>Motivational Message:</strong> {motivational_message}</p>
+                <p><strong>Next Goal:</strong> {improvement_goal}</p>
             </div>
             
             <div style='margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 5px;'>
-                <h3>📊 Detailed Performance:</h3>
+                <h3>Detailed Performance:</h3>
                 <p>Total Score: {quiz_result.get('total_score', 0)}/{quiz_result.get('max_score', 0)}</p>
                 <p>Assessment Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
                 <p>Student Email: {student_email}</p>
