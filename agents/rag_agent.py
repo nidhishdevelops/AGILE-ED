@@ -222,11 +222,10 @@ def retrieve_and_generate(module, topic, style):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future_openai = executor.submit(run_openai_with_logging)
         future_gemini = executor.submit(run_gemini_with_logging)
-        future_perplexity = executor.submit(run_perplexity_with_logging)
         
         openai_resp = future_openai.result()
         gemini_resp = future_gemini.result()
-        perplexity_resp = future_perplexity.result()
+        perplexity_resp = "Error: Perplexity disabled"
     
     # Get all 3 responses for complete peer review matrix
     responses_list = [
