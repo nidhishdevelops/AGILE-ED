@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- MathJax for LaTeX -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <!-- Highlight.js for code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="text-align: right;">
+            {% if current_user.is_authenticated %}
+            Welcome, {{ current_user.username }} | <a href="/history">History</a> | <a href="/mastery">Mastery</a> | <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a>
+            {% endif %}
+            </div>
+            
+            <img src="{{ url_for('static', filename='img/university_logo.png') }}" alt="University Logo" class="logo">
+            <h1>Personalized Learning Assistant</h1>
+        </div>
+
+        <!-- Step 1: Ask question -->
+        <div id="step1" class="step active">
+            <div class="input-group">
+                <textarea id="queryInput" placeholder="Ask anything about data science, machine learning, statistics, etc..." rows="4"></textarea>
+                <button id="askBtn">Get Explanation →</button>
+            </div>
+            <div id="loading" class="loading" style="display: none;">Generating response...</div>
+        </div>
+
+        <!-- Step 2: Show response + Next button -->
+        <div id="step2" class="step" style="display: none;">
+            <div id="responseContent"></div>
+            <div class="button-group">
+                <button id="nextToQuizBtn" class="next-btn">Next: Take Quiz →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Quiz section -->
+        <div id="step3" class="step" style="display: none;">
+            <h2>Quiz: <span id="quizTopic"></span></h2>
+            <div id="quizContainer"></div>
+            <div class="button-group">
+                <button id="submitQuizBtn" class="submit-btn">Submit Quiz →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Email input -->
+        <div id="step4" class="step" style="display: none;">
+            <h3>Enter your email to receive personalised assessment</h3>
+            <input type="email" id="studentEmail" placeholder="you@example.com" required>
+            <div class="button-group">
+                <button id="sendEmailBtn" class="submit-btn">Send Assessment →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Final result -->
+        <div id="step5" class="step" style="display: none;">
+            <div class="result-card">
+                <h3>Assessment Sent!</h3>
+                <p id="resultMessage"></p>
+                <button onclick="location.reload()">New Query</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

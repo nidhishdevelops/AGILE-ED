@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mastery Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .mastery-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .mastery-score {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .topic-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 5px solid #4CAF50;
+        }
+        .weak-topic {
+            border-left-color: #f44336;
+            background: #fff5f5;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s;
+        }
+        .recommendation {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-beginner { background: #f44336; color: white; }
+        .badge-intermediate { background: #ff9800; color: white; }
+        .badge-advanced { background: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Mastery Dashboard</h1>
+            <div>
+                Welcome, {{ current_user.username }} | 
+                <a href="/">Home</a> | 
+                <a href="/history">History</a> | 
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+
+        {% if total_quizzes == 0 %}
+            <div class="mastery-card">
+                <p>No quizzes taken yet. Ask a question and take a quiz to see your mastery!</p>
+                <a href="/" style="color: white; text-decoration: underline;">Start learning →</a>
+            </div>
+        {% else %}
+            <div class="mastery-card">
+                <div class="mastery-score">{{ "%.1f"|format(avg_percentage) }}%</div>
+                <div>Overall Mastery Score</div>
+                <div class="progress-bar" style="margin-top: 15px;">
+                    <div class="progress-fill" style="width: {{ avg_percentage }}%;"></div>
+                </div>
+                <div style="margin-top: 10px;">
+                    {% if avg_percentage >= 80 %}
+                        🎉 Advanced Level - Excellent progress!
+                    {% elif avg_percentage >= 60 %}
+                        📈 Intermediate Level - Keep going!
+                    {% else %}
+                        🌱 Beginner Level - Review fundamentals
+                    {% endif %}
+                </div>
+            </div>
+
+            <h2>📚 Topic Mastery</h2>
+            {% for topic in topic_summary %}
+                <div class="topic-card {% if topic.avg_score < 70 %}weak-topic{% endif %}">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>{{ topic.topic }}</strong>
+                        <span class="badge badge-{{ topic.level.lower() }}">{{ topic.level }}</span>
+                    </div>
+                    <div>Score: {{ "%.1f"|format(topic.avg_score) }}% ({{ topic.attempts }} attempt{{ 's' if topic.attempts != 1 else '' }})</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ topic.avg_score }}%;"></div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if weak_topics %}
+                <div class="recommendation">
+                    <h3>💡 Recommendations</h3>
+                    <p>Focus on these topics to improve your mastery:</p>
+                    <ul>
+                        {% for topic in weak_topics[:3] %}
+                            <li><strong>{{ topic.topic }}</strong> ({{ "%.1f"|format(topic.avg_score) }}%) - Review fundamentals and practice more</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="recommendation" style="background: #e8f5e9;">
+                    <h3>🎉 Outstanding!</h3>
+                    <p>You have strong mastery across all topics. Consider exploring advanced subjects or helping others learn!</p>
+                </div>
+            {% endif %}
+
+            <div style="margin-top: 30px;">
+                <canvas id="masteryChart"></canvas>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        {% if topic_summary %}
+        // Chart.js visualization
+        const ctx = document.getElementById('masteryChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ topic_summary|map(attribute='topic')|list|tojson }},
+                datasets: [{
+                    label: 'Mastery Score (%)',
+                    data: {{ topic_summary|map(attribute='avg_score')|list|tojson }},
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Score (%)' }
+                    },
+                    x: {
+                        ticks: { rotation: -45, autoSkip: true, maxRotation: 45, minRotation: 45 }
+                    }
+                },
+                plugins: {
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(1)}%` } }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

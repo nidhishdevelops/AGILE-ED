@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your Quiz History</h1>
+            <a href="/">← Back to Home</a> | <a href="/logout">Logout</a>
+        </div>
+        {% if quizzes %}
+            <table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr><th>Topic</th><th>Score</th><th>Grade</th><th>Mastery</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+                    {% for q in quizzes %}
+                    <tr>
+                        <td>{{ q.topic }}</td>
+                        <td>{{ q.percentage|round(1) }}%</td>
+                        <td>{{ q.grade }}</td>
+                        <td>{{ q.mastery_level }}</td>
+                        <td>{{ q.taken_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No quizzes taken yet. Ask a question and take a quiz!</p>
+        {% endif %}
+    </div>
+</body>
+</html>

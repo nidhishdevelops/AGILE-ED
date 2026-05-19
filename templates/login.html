@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Learning Assistant</title>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 8px; margin: 8px 0; }
+        button { width: 100%; padding: 10px; background: #2c3e66; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .switch { text-align: center; margin-top: 10px; cursor: pointer; color: #2c3e66; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Personalized Learning</h2>
+        <form id="authForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="username" placeholder="Username (for registration)">
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" id="submitBtn">Login</button>
+        </form>
+        <p class="switch" id="toggleMode">New user? Register</p>
+        <div id="message"></div>
+    </div>
+    <script>
+        let isLogin = true;
+        const form = document.getElementById('authForm');
+        const usernameField = document.getElementById('username');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggle = document.getElementById('toggleMode');
+        const messageDiv = document.getElementById('message');
+
+        toggle.addEventListener('click', () => {
+            isLogin = !isLogin;
+            if (isLogin) {
+                usernameField.style.display = 'none';
+                submitBtn.innerText = 'Login';
+                toggle.innerText = 'New user? Register';
+            } else {
+                usernameField.style.display = 'block';
+                submitBtn.innerText = 'Register';
+                toggle.innerText = 'Already have an account? Login';
+            }
+        });
+        usernameField.style.display = 'none';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+
+            if (isLogin) {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    messageDiv.innerText = data.message || 'Login failed';
+                }
+            } else {
+                if (!username) { messageDiv.innerText = 'Username required'; return; }
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, username, password})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    messageDiv.innerText = data.message || 'Registration failed';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

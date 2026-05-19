@@ -14,10 +14,10 @@ def initialize_pinecone():
             logger.info(f"Using index: {index_name}")
             return pc.Index(index_name)
         
-        logger.info(f"Creating index: {index_name}")
+        logger.info(f"Creating index: {index_name} with dimension {Config.PINECONE_DIMENSION}")
         pc.create_index(
             name=index_name,
-            dimension=1536,
+            dimension=Config.PINECONE_DIMENSION,  # Use from config
             metric="cosine",
             spec=ServerlessSpec(cloud='aws', region='us-east-1')
         )
@@ -29,13 +29,9 @@ def initialize_pinecone():
 
 def upsert_documents(index, documents, namespace):
     try:
-        # Reduce batch size significantly for safety
-        batch_size = 10  # Very conservative batch size
-        
+        batch_size = 10 
         for i in range(0, len(documents), batch_size):
             batch = documents[i:i+batch_size]
-            
-            # Sanitize metadata before upsert
             sanitized_batch = []
             for doc in batch:
                 sanitized_metadata = sanitize_metadata(doc.get('metadata', {}))
@@ -54,15 +50,44 @@ def upsert_documents(index, documents, namespace):
         return False
 
 def sanitize_metadata(metadata):
-    """Ensure all metadata values are Pinecone-compatible types"""
     sanitized = {}
     for key, value in metadata.items():
         if isinstance(value, (str, int, float, bool)):
             sanitized[key] = value
         elif isinstance(value, list):
-            # Convert list elements to strings if needed
             sanitized[key] = [str(item) for item in value]
         else:
-            # Convert any other type to string
             sanitized[key] = str(value)
     return sanitized
+def list_namespaces():
+    """List all namespaces in the index"""
+    try:
+        pc_index = initialize_pinecone()
+        stats = pc_index.describe_index_stats()
+        namespaces = list(stats.get('namespaces', {}).keys())
+        return namespaces
+    except Exception as e:
+        logger.error(f"Error listing namespaces: {str(e)}")
+        return []
+
+def clear_namespace(namespace):
+    """Clear all vectors from a namespace"""
+    try:
+        pc_index = initialize_pinecone()
+        pc_index.delete(delete_all=True, namespace=namespace)
+        logger.info(f"Cleared namespace: {namespace}")
+        return True
+    except Exception as e:
+        logger.error(f"Error clearing namespace {namespace}: {str(e)}")
+        return False
+
+def get_namespace_stats(namespace):
+    """Get statistics for a specific namespace"""
+    try:
+        pc_index = initialize_pinecone()
+        stats = pc_index.describe_index_stats()
+        namespace_stats = stats.get('namespaces', {}).get(namespace, {})
+        return namespace_stats
+    except Exception as e:
+        logger.error(f"Error getting stats for {namespace}: {str(e)}")
+        return {}

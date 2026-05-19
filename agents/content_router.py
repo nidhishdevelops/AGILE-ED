@@ -82,8 +82,8 @@ def find_topic_module(topic):
                     vector=query_embedding,
                     top_k=3,
                     include_metadata=True,
-                    namespace=namespace,
-                    min_score=best_score
+                    namespace=namespace
+                    # min_score removed
                 )
                 if results['matches']:
                     top_match = results['matches'][0]

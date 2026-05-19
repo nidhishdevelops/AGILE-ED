@@ -1,4 +1,4 @@
-pinecone-client
+pinecone[grpc]
 openai
 google-generativeai
 python-dotenv
@@ -12,3 +12,14 @@ tqdm
 python-docx
 numpy
 beautifulsoup4
+matplotlib
+pandas
+scipy
+seaborn
+tiktoken
+flask
+requests
+flask-sqlalchemy 
+flask-login 
+flask-bcrypt
+gunicorn

@@ -1,0 +1,192 @@
+:root {
+    --primary: #2c3e66;
+    --primary-dark: #1a2a44;
+    --secondary: #f39c12;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #27ae60;
+    --danger: #e74c3c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+    padding: 30px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 20px;
+}
+
+.logo {
+    height: 70px;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.step {
+    transition: all 0.3s ease;
+}
+
+.input-group {
+    margin: 20px 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: var(--primary-dark);
+    transform: scale(1.02);
+}
+
+.next-btn, .submit-btn {
+    background: var(--secondary);
+    color: #2c3e66;
+    font-weight: bold;
+}
+
+.button-group {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--primary);
+    padding: 20px;
+}
+
+#responseContent {
+    background: var(--light);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+#responseContent h1, #responseContent h2, #responseContent h3 {
+    color: var(--primary);
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+#responseContent pre {
+    background: #282c34;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+#responseContent code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+#responseContent .math {
+    font-size: 1.1rem;
+}
+
+.quiz-question {
+    background: #fef9e6;
+    border-left: 5px solid var(--secondary);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+
+.quiz-question p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.options {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.options label {
+    display: block;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+textarea.answer-input, input.answer-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.result-card {
+    background: #e8f5e9;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-card p {
+    font-size: 1.2rem;
+    margin: 15px 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    .header h1 {
+        font-size: 1.4rem;
+    }
+}

@@ -41,9 +41,12 @@ def chat_completion(prompt, model=Config.OPENAI_MODEL):
     
     return "Error: OpenAI response failed after retries"
 
-def get_embedding(text, model="text-embedding-3-small"):
+def get_embedding(text, model=Config.EMBEDDING_MODEL):
+    """Get embedding with configurable model"""
     if not text.strip():
-        return [0.0] * 1536
+        # Return zero vector of correct dimension
+        dimension = 1536 if "small" in model else 3072
+        return [0.0] * dimension
         
     for attempt in range(Config.MAX_LLM_RETRIES):
         try:
@@ -57,9 +60,11 @@ def get_embedding(text, model="text-embedding-3-small"):
             else:
                 logger.error(f"Embedding error: {str(e)}")
                 if attempt == Config.MAX_LLM_RETRIES - 1:
-                    return [0.0] * 1536
+                    dimension = 1536 if "small" in model else 3072
+                    return [0.0] * dimension
     
-    return [0.0] * 1536
+    dimension = 1536 if "small" in model else 3072
+    return [0.0] * dimension
 
 def is_zero_vector(embedding):
     return all(abs(x) < 1e-6 for x in embedding)

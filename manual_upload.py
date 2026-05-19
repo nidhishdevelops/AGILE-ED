@@ -59,7 +59,8 @@ def upload_documents():
                                 "source": rel_path,
                                 "page": metadata.get("page", 1),
                                 "slide": metadata.get("slide", 1),
-                                "section": metadata.get("section", 1)
+                                "section": metadata.get("section", 1),
+                                "text": chunk_text[:500]
                             }
                             
                             embedding = get_embedding(chunk_text)
