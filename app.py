@@ -236,6 +236,12 @@ def mastery():
                          weak_topics=weak_topics,
                          total_quizzes=len(quizzes))
 
+@app.route('/test_email')
+def test_email():
+    from agents.email_agent import send_notification
+    success = send_notification("Test Subject", "<p>Test body</p>", "your_test_email@gmail.com")
+    return f"Email sent: {success}"
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
