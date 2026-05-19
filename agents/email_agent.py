@@ -8,19 +8,10 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def send_notification(subject, body, to_email=None):
-    """
-    Send an email notification.
-    
-    Args:
-        subject: Email subject
-        body: HTML email body
-        to_email: Recipient email address. If None, uses Config.EMAIL_RECEIVER
-    """
     if not Config.EMAIL_PASSWORD or not Config.EMAIL_SENDER:
         logger.error("Email credentials not configured")
         return False
         
-    # Use provided email or fallback
     recipient = to_email if to_email else Config.EMAIL_RECEIVER
     
     try:
@@ -30,7 +21,6 @@ def send_notification(subject, body, to_email=None):
         msg['To'] = recipient
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # Ensure body is already HTML (as generated in quiz_agent)
         html = f"""<html><body>
             <h2>Learning System Notification</h2>
             <p>{body}</p>
@@ -40,7 +30,9 @@ def send_notification(subject, body, to_email=None):
         
         msg.attach(MIMEText(html, 'html'))
         
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        # Use SMTP_SSL with port 465 (or starttls with 587)
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
             server.login(Config.EMAIL_SENDER, Config.EMAIL_PASSWORD)
             server.send_message(msg)
             
@@ -48,4 +40,7 @@ def send_notification(subject, body, to_email=None):
         return True
     except Exception as e:
         logger.error(f"Email error to {recipient}: {str(e)}")
+        # Log full traceback for debugging
+        import traceback
+        logger.error(traceback.format_exc())
         return False
