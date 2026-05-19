@@ -1,4 +1,4 @@
-"pinecone[grpc]"
+pinecone[grpc]
 openai
 google-generativeai
 python-dotenv
