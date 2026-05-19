@@ -134,7 +134,7 @@ function formatResponse(data) {
     
     // Sources (from RAG)
     if (data.sources && data.sources.length) {
-        html += `<h3>📚 Sources</h3><ul>`;
+        html += `<h3>Sources</h3><ul>`;
         data.sources.forEach(s => {
             html += `<li>${escapeHtml(s.original_file)} (${escapeHtml(s.location)})</li>`;
         });
@@ -143,7 +143,7 @@ function formatResponse(data) {
     
     // Recent Advancements
     if (data.recent_advancements && data.recent_advancements.length) {
-        html += `<h3>📰 Recent Advancements</h3><ul>`;
+        html += `<h3>Recent Advancements</h3><ul>`;
         data.recent_advancements.forEach(adv => {
             html += `<li><strong>${escapeHtml(adv.title)}</strong><br>`;
             html += `${escapeHtml(adv.summary)}<br>`;
@@ -156,7 +156,7 @@ function formatResponse(data) {
     
     // Research Papers
     if (data.research_papers && data.research_papers.length) {
-        html += `<h3>📄 Research Papers</h3><ul>`;
+        html += `<h3>Research Papers</h3><ul>`;
         data.research_papers.forEach(paper => {
             html += `<li><strong>${escapeHtml(paper.title)}</strong><br>`;
             html += `Authors: ${escapeHtml(paper.authors)} (${escapeHtml(paper.year)})<br>`;
@@ -169,7 +169,7 @@ function formatResponse(data) {
     
     // YouTube Videos
     if (data.video_recommendations && data.video_recommendations.length) {
-        html += `<h3>🎥 Recommended Videos</h3><ul>`;
+        html += `<h3>Recommended Videos</h3><ul>`;
         data.video_recommendations.forEach(v => {
             html += `<li><a href="https://youtu.be/${v.video_id}" target="_blank">${escapeHtml(v.title)}</a> - ${escapeHtml(v.channel)}</li>`;
         });
@@ -178,7 +178,7 @@ function formatResponse(data) {
     
     // Reference Books
     if (data.reference_books && data.reference_books.length) {
-        html += `<h3>📖 Reference Books</h3><ul>`;
+        html += `<h3>Reference Books</h3><ul>`;
         data.reference_books.forEach(book => {
             html += `<li><strong>${escapeHtml(book.title)}</strong> by ${escapeHtml(book.authors)} (${escapeHtml(book.year)})<br>`;
             html += `${escapeHtml(book.description)}<br>`;
