@@ -32,5 +32,5 @@ class Config:
     PINECONE_DIMENSION = 3072
     
     MAX_TOKENS = 8000
-    MAX_LLM_RETRIES = 3
+    MAX_LLM_RETRIES = 2
     LLM_TIMEOUT = 60
