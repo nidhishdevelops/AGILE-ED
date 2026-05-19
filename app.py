@@ -9,6 +9,7 @@ from database.models import db, User, QuizResult
 import os
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 database_url = os.environ.get('DATABASE_URL')
 if database_url:
     # Render provides a postgres:// URL, but SQLAlchemy requires postgresql://
