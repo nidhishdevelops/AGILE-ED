@@ -34,3 +34,5 @@ class Config:
     MAX_TOKENS = 8000
     MAX_LLM_RETRIES = 2
     LLM_TIMEOUT = 60
+    SENDGRID_API_KEY= os.getenv("SENDGRID_API_KEY")
+    FROM_EMAIL = os.getenv("FROM_EMAIL") 
